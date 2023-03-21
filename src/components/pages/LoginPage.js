@@ -19,7 +19,7 @@ export default function SignInPage() {
             }
     
             await api.post('/verifyUser', body).then(res => {
-                // console.log(res)
+                console.log(res)
                 window.location.href = 'http://localhost:3000/home';
             }).catch(err => {
                 console.log(err)
