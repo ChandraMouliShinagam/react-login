@@ -2,15 +2,41 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import '../../App.css'
+import api from '../../utils/axiosAPI';
+// import { useHistory } from 'react-router-dom';
 
 export default function SignInPage() {
+
+    // const history = useHistory();
+    
+    const handleLogin = async (e) => {
+        try {
+            e.preventDefault();
+            
+            var body = {
+                'password': e.target.password.value,
+                'email': e.target.email.value
+            }
+    
+            const res = await api.post('/login', body);
+            console.log(res)
+            if(res.status == 200) {
+                window.location.href = 'http://localhost:3000/home';
+            } else {
+                alert(res.data.body);
+            }
+        } catch (err) {
+             console.log(err.mesaage)
+        }
+    }
+
     return (
         <div className="text-center m-5-auto">
             <h2>Sign in to us</h2>
-            <form action="/home">
+            <form onSubmit={handleLogin}>
                 <p>
                     <label>Username or email address</label><br/>
-                    <input type="text" name="first_name" required />
+                    <input type="text" name="email" required />
                 </p>
                 <p>
                     <label>Password</label>

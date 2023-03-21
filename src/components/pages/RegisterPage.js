@@ -1,18 +1,49 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import api from '../../utils/axiosAPI'
+// import { useHistory } from 'react-router-dom'
 
 import '../../App.css'
 
 export default function SignUpPage() {
 
+    // const history = useHistory();
+
+    const handleResgister = async (e) => {
+        try {
+            e.preventDefault();
+            console.log(e.target.first_name)
+            
+            var body = {
+                'name': e.target.first_name.value,
+                'mobile': e.target.mobile.value,
+                'password': e.target.password.value,
+                'email': e.target.email.value
+            }
+    
+            const res = await api.post('/addUser', body);
+            if(res.status == 200) {
+                window.location.href = 'http://localhost:3000/home';
+            } else {
+                alert('something went wrong...');
+            }
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
+
     return (
         <div className="text-center m-5-auto">
             <h2>Join us</h2>
             <h5>Create your personal account</h5>
-            <form action="/home">
+            <form onSubmit={handleResgister}>
                 <p>
                     <label>Username</label><br/>
                     <input type="text" name="first_name" required />
+                </p>
+                <p>
+                    <label>Mobile</label><br/>
+                    <input type="text" name="mobile" required />
                 </p>
                 <p>
                     <label>Email address</label><br/>
