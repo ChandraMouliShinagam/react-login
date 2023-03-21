@@ -18,13 +18,13 @@ export default function SignInPage() {
                 'email': e.target.email.value
             }
     
-            const res = await api.post('/login', body);
-            console.log(res)
-            if(res.status == 200) {
+            await api.post('/verifyUser', body).then(res => {
+                // console.log(res)
                 window.location.href = 'http://localhost:3000/home';
-            } else {
-                alert(res.data.body);
-            }
+            }).catch(err => {
+                console.log(err)
+                alert(err.response.data)
+            })
         } catch (err) {
              console.log(err.mesaage)
         }
