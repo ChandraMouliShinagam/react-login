@@ -6,28 +6,31 @@ import api from '../../utils/axiosAPI'
 
 export default function ForgetPasswordPage() {
 
-    let [enterResetCode, setEnterResetCode] = useState(false);
+    let [isCodeVerified, setIsCodeVerified] = useState(false);
     let [isEmailVerified, setIsEmailVerified] = useState(false);
+
+    let email;
 
     const handleEmailVerification = async (e) => {
         e.preventDefault();
 
         try {
+            email = e.target.email.value;
             let data = {
-                email: e.target.email.value
+                email
             }
 
-            if(enterResetCode) {
+            if(isEmailVerified) {
                 data.code = e.target.code.value;
                 await api.post('/verifyResetCode', data).then(res => {
-                    setIsEmailVerified(true);
+                    setIsCodeVerified(true);
                 }).catch(err => {
                     alert(err.response.data);
                 })
             } else {
                 await api.post('/sendResetCode', data).then(res => {
                     console.log(res)
-                    setEnterResetCode(true)
+                    setIsEmailVerified(true)
                 }).catch(err => {
                     alert(err.response.data);
                 })
@@ -52,7 +55,8 @@ export default function ForgetPasswordPage() {
             }
 
             let data = {
-                new_password: new_pw
+                email,
+                password: new_pw
             }
 
             await api.post('/resetPassword', data).then(res => {
@@ -70,10 +74,10 @@ export default function ForgetPasswordPage() {
     return (
         <div className="text-center m-5-auto">
             <h2>Reset your password</h2>
-            <h5>{ !isEmailVerified ? "Enter your email address and we will send you a reset code" : "Enter your new password"}</h5>
+            <h5>{ !isCodeVerified ? "Enter your email address and we will send you a reset code" : "Enter your new password"}</h5>
             
             {
-                isEmailVerified ?
+                isCodeVerified ?
                 <form onSubmit={handlePasswordReset}>
                     <p>
                         <label id="new_password">New Password</label><br/>
@@ -104,6 +108,7 @@ export default function ForgetPasswordPage() {
                         <button id="sub_btn" type="submit">Send password reset email</button>
                     </p>
                 </form>
+              
 
             }
             <footer>
