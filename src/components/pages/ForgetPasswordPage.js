@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import '../../App.css'
@@ -9,13 +9,18 @@ export default function ForgetPasswordPage() {
     let [isCodeVerified, setIsCodeVerified] = useState(false);
     let [isEmailVerified, setIsEmailVerified] = useState(false);
 
-    let email;
+    let [email, setEmail] = useState(null);
+
+    useEffect(() => {
+        console.log(email);
+    }, [email])
+    
 
     const handleEmailVerification = async (e) => {
         e.preventDefault();
 
         try {
-            email = e.target.email.value;
+            if(!email) setEmail(e.target.email.value);
             let data = {
                 email
             }
@@ -53,15 +58,16 @@ export default function ForgetPasswordPage() {
                 alert("password doesn't match");
                 return;
             }
-
+            
             let data = {
                 email,
                 password: new_pw
             }
+            console.log(data);
 
             await api.post('/resetPassword', data).then(res => {
                 alert('password updated sucessfully proceed to login.')
-                window.location.href = 'http:localhost:3000/login';
+                window.location.href = 'http://localhost:3000/login';
             }).catch(err => {
                 alert(err.response.data);
             })
@@ -98,7 +104,7 @@ export default function ForgetPasswordPage() {
                         <input type="email" name="email" required />
                     </p>
                     {
-                        enterResetCode && 
+                        isEmailVerified && 
                         <p>
                             <label id="reset_code_lbl">Enter Verification Code</label><br/>
                             <input type="text" name="code" required />
