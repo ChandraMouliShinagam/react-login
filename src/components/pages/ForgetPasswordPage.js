@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import '../../App.css'
 import api from '../../utils/axiosAPI'
 
 export default function ForgetPasswordPage() {
+
+    const history = useHistory();
 
     let [isCodeVerified, setIsCodeVerified] = useState(false);
     let [isEmailVerified, setIsEmailVerified] = useState(false);
@@ -54,7 +56,7 @@ export default function ForgetPasswordPage() {
             let new_pw = e.target.new_pw.value;
             let conf_pw = e.target.conf_pw.value;
 
-            if(new_pw != conf_pw) {
+            if(new_pw !== conf_pw) {
                 alert("password doesn't match");
                 return;
             }
@@ -67,7 +69,7 @@ export default function ForgetPasswordPage() {
 
             await api.post('/resetPassword', data).then(res => {
                 alert('password updated sucessfully proceed to login.')
-                window.location.href = 'http://localhost:3000/login';
+                history.push('/login')
             }).catch(err => {
                 alert(err.response.data);
             })

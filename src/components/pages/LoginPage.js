@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom'
 
 import '../../App.css'
 import api from '../../utils/axiosAPI';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 export default function SignInPage() {
 
-    // const history = useHistory();
+    const history = useHistory();
     
     const handleLogin = async (e) => {
         try {
@@ -20,7 +20,7 @@ export default function SignInPage() {
     
             await api.post('/verifyUser', body).then(res => {
                 console.log(res)
-                window.location.href = 'http://localhost:3000/home';
+                history.push('/home')
             }).catch(err => {
                 console.log(err)
                 alert(err.response.data)

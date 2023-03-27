@@ -1,13 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import api from '../../utils/axiosAPI'
-// import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import '../../App.css'
 
 export default function SignUpPage() {
 
-    // const history = useHistory();
+    const history = useHistory();
 
     const handleResgister = async (e) => {
         try {
@@ -22,8 +22,9 @@ export default function SignUpPage() {
             }
     
             const res = await api.post('/addUser', body);
-            if(res.status == 200) {
-                window.location.href = 'http://localhost:3000/home';
+            if(res.status === 200) {
+                alert('Registered Sucessfully...!')
+                history.push('/login')
             } else {
                 alert('something went wrong...');
             }
